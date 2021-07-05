@@ -16,16 +16,17 @@ object DataUtils {
                     Build.CPU_ABI.length % 10 + Build.DEVICE.length % 10 +
                     Build.MANUFACTURER.length % 10 + Build.MODEL.length % 10 +
                     Build.PRODUCT.length % 10
-            var serial: String? = "serial"
+            var serial: String? = null
             try {
-                val data = Build::class.java.getField("SERIAL")
-                val serialData = data.get(null)
-                serial = serialData?.toString()
-                return UUID(szDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
+                serial = Build::class.java.getField("SERIAL").get(null).toString()
+                return UUID(
+                    szDevIDShort.hashCode().toLong(),
+                    serial.hashCode().toLong()
+                ).toString()
             } catch (exception: Exception) {
                 serial = "serial"
             }
 
-            return UUID(szDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
+            return UUID(szDevIDShort.hashCode().toLong(), serial!!.hashCode().toLong()).toString()
         }
 }
