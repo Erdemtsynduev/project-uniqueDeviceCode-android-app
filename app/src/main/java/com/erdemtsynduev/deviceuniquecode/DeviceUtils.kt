@@ -3,7 +3,7 @@ package com.erdemtsynduev.deviceuniquecode
 import android.os.Build
 import java.util.*
 
-object DataUtils {
+object DeviceUtils {
 
     /**
      * Return pseudo unique ID
