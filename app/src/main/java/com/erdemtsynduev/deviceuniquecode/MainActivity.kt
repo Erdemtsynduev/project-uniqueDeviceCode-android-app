@@ -12,6 +12,6 @@ class MainActivity : AppCompatActivity() {
 
         val textView : TextView = findViewById(R.id.text_data)
         // Get unique pseudo id device
-        textView.text = DeviceUtils.uniquePseudoID
+        textView.text = DeviceUtils.getUniquePseudoIDWithAndroidId(context = this)
     }
 }
