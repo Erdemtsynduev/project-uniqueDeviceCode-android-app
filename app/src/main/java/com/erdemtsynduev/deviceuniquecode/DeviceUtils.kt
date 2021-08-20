@@ -1,13 +1,16 @@
 package com.erdemtsynduev.deviceuniquecode
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
+import android.provider.Settings
 import java.util.*
 
 object DeviceUtils {
 
     /**
-     * Return pseudo unique ID
-     *
+     * Возвращает псевдо уникальный номер ID
+     * Работает до Android 9
      * @return ID
      */
     val uniquePseudoID: String
@@ -27,6 +30,28 @@ object DeviceUtils {
                 serial = "serial"
             }
 
-            return UUID(szDevIDShort.hashCode().toLong(), serial!!.hashCode().toLong()).toString()
+            return UUID(szDevIDShort.hashCode().toLong(), serial.hashCode().toLong()).toString()
         }
+
+    /**
+     * Возвращает уникальный номер на основе Android Id
+     * Если Android ID нет, то будет попытка генерации псевдоуникального номера
+     * @return ID
+     */
+    @SuppressLint("HardwareIds")
+    fun getUniquePseudoIDWithAndroidId(context: Context?): String {
+        if (context == null) {
+            return uniquePseudoID
+        }
+        try {
+            val androidId: String? = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            if (androidId != null && androidId.isNotEmpty()) {
+                return UUID.nameUUIDFromBytes(androidId.toByteArray()).toString()
+            } else {
+                return uniquePseudoID
+            }
+        } catch (exception: Exception) {
+            return uniquePseudoID
+        }
+    }
 }
